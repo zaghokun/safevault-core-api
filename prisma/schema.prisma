@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionType {
+  TOPUP
+  TRANSFER
+  WITHDRAW
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Login Password
+  name      String
+  
+  wallet    Wallet?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  balance   Decimal  @default(0.00) @db.Decimal(15, 2)
+  
+  // UPGRADE 1: PIN Transaksi (6 digit angka, di-hash)
+  pin       String?  
+  
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+
+  // Relasi History
+  sentTransactions     Transaction[] @relation("Sender")
+  receivedTransactions Transaction[] @relation("Receiver")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  amount    Decimal  @db.Decimal(15, 2)
+  
+  // UPGRADE 2: Gunakan Enum
+  type      TransactionType   
+  status    TransactionStatus @default(PENDING) 
+
+  // UPGRADE 3: Forensic Snapshot (Jejak Saldo)
+  // Kita catat saldo dompet PENGIRIM sebelum transaksi terjadi
+  senderBalanceBeforeSnapshot Decimal? @db.Decimal(15, 2)
+  senderBalanceAfterSnapshot  Decimal? @db.Decimal(15, 2)
+  
+  // Kita catat saldo dompet PENERIMA sebelum transaksi terjadi
+  receiverBalanceBeforeSnapshot Decimal? @db.Decimal(15, 2)
+  receiverBalanceAfterSnapshot  Decimal? @db.Decimal(15, 2)
+
+  idempotencyKey String? @unique 
+
+  fromWalletId String?
+  fromWallet   Wallet? @relation("Sender", fields: [fromWalletId], references: [id])
+
+  toWalletId   String?
+  toWallet     Wallet? @relation("Receiver", fields: [toWalletId], references: [id])
+
+  description String?
+  createdAt   DateTime @default(now())
+}
