@@ -60,4 +60,10 @@ export class UsersService {
             throw new InternalServerErrorException('Gagal membuat user: ' + error.message);
         }
     }
+
+    async findByEmail(email: string){
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
+    }
 }
