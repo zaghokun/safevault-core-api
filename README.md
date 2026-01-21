@@ -38,12 +38,12 @@ Pastikan **Docker Desktop** sudah terpasang dan dalam keadaan berjalan.
 npm install
 ```
 
-###3️⃣ Setup Database (Docker + Prisma)
+### 3️⃣ Setup Database (Docker + Prisma)
 ```bash
 docker-compose up -d
 npx prisma migrate dev
 ```
-###4️⃣ Jalankan Server
+### 4️⃣ Jalankan Server
 ```bash
 npm run start:dev
 ```
@@ -52,15 +52,15 @@ Akses Swagger API Documentation di:
 Salin kode
 http://localhost:3000/api
 ```
-###5️⃣ Jalankan Testing (Opsional)
+### 5️⃣ Jalankan Testing (Opsional)
 ```bash
 npm test
 ```
-###6️⃣ Melihat Data Menggunakan Prisma Studio
+### 6️⃣ Melihat Data Menggunakan Prisma Studio
 ```bash
 npx prisma studio
 ```
-###📌 Catatan
+### 📌 Catatan
 
 Pastikan environment variable sudah dikonfigurasi dengan benar (.env)
 
