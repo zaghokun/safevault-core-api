@@ -48,7 +48,23 @@ export class TransactionsService {
     }
 
     async transfer(senderUserId: string, transferDto: TransferDto){
-        const {toWalletId, amount, pin, description} = transferDto;
+        const {toWalletId, amount, pin, description, idempotencyKey} = transferDto;
+
+        // ----------------- INDEMPOTENCY lOGIC -----------------------
+        
+        if (idempotencyKey){
+            const existingTransaction = await this.prisma.transaction.findUnique({
+                where: {idempotencyKey},
+            });
+
+            if (existingTransaction){
+                return{
+                    message: 'Transaksi sudah diproses',
+                    data: existingTransaction,
+                }
+            }
+        }
+        
         // ----------------- SENDER -----------------------
         const senderWallet = await this.prisma.wallet.findUnique({
             where: {userId: senderUserId},
@@ -95,6 +111,7 @@ export class TransactionsService {
                     fromWalletId: senderWallet.id,
                     toWalletId: receiverWallet.id,
                     description: description || 'Transfer user',
+                    idempotencyKey: idempotencyKey,
 
                     senderBalanceBeforeSnapshot: senderBalanceBefore,
                     senderBalanceAfterSnapshot: senderBalanceAfter,

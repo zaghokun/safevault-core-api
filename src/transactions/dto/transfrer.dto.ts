@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsNotEmpty, Min, IsPositive, Length } from "class-validator";
+import { IsNumber, IsString, IsNotEmpty, Min, IsPositive, Length, IsOptional } from "class-validator";
 
 export class TransferDto{
     @IsString()
@@ -16,4 +16,8 @@ export class TransferDto{
 
     @IsString()
     description?: string;
+
+    @IsString()
+    @IsOptional()
+    idempotencyKey?: string;
 }
