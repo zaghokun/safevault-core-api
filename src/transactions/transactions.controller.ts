@@ -3,7 +3,10 @@ import { TransactionsService } from './transactions.service';
 import { CreateTopupDto } from './dto/create-topup.dto';
 import { TransferDto } from './dto/transfrer.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('Transactions')
+@ApiBearerAuth()
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}

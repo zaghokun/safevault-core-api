@@ -3,7 +3,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { get } from 'http';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -13,6 +15,8 @@ export class UsersController {
   async register(@Body() createUserDto: CreateUserDto){
     return this.usersService.register(createUserDto);
   }
+
+  @ApiBearerAuth()
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
