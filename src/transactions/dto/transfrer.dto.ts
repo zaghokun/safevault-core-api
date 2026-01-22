@@ -15,6 +15,7 @@ export class TransferDto{
     pin: string;
 
     @IsString()
+    @IsOptional()
     description?: string;
 
     @IsString()

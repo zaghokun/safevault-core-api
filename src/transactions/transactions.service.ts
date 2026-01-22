@@ -95,7 +95,7 @@ export class TransactionsService {
 
             await tx.wallet.update({
                 where: {id: senderWallet.id},
-                data: { balance: {increment: amount}},
+                data: { balance: {decrement: amount}},
             });
 
             await tx.wallet.update({
