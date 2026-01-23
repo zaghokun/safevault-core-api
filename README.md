@@ -1,69 +1,55 @@
-# 🏦 SafeVault - Core Banking System
+# SafeVault - Core Banking System (Backend)
 
-SafeVault adalah sistem backend perbankan modern yang dibangun menggunakan **NestJS**, **Prisma**, dan **PostgreSQL**. Sistem ini dirancang dengan standar keamanan setara perbankan, mendukung transaksi atomik (ACID), serta dilengkapi unit testing untuk memastikan kualitas dan keandalan sistem.
+SafeVault adalah simulasi sistem backend perbankan modern (Core Banking) yang dibangun dengan standar industri. Fokus utama project ini adalah keamanan (Security), integritas data (ACID Transactions), dan pengujian otomatis (Testing).
 
----
+## Tech Stack
+- **Framework:** NestJS.
+- **Database:** PostgreSQL + Prisma ORM.
+- **Security:** JWT Auth, Bcrypt Hashing, Role Guard.
+- **Reliability:** Atomic Transactions (Anti-Race Condition) & Idempotency Key.
+- **Quality:** 100% Unit Test Coverage.
+- **Docs:** Swagger OpenAPI (`/api`).
 
-## 🚀 Fitur Utama
+## How to run Local Development
 
-- **Authentication**  
-  Register & Login menggunakan **JWT** dan **Bcrypt**
+### Requirement
+- Node.js (v16+)
+- Docker Desktop (Database)
 
-- **Security**  
-  Guard Protection & Role-based Authorization
-
-- **Transactions**  
-  Transaksi atomik berbasis **ACID** (Top Up & Transfer saldo)
-
-- **Reliability**  
-  **Idempotency Key** untuk mencegah double charge pada request transaksi
-
-- **Documentation**  
-  Swagger OpenAPI tersedia di endpoint `/api`
-
-- **Quality Assurance**  
-  Target **100% Unit Test Coverage**
-
----
-
-## 🛠️ Cara Menjalankan Aplikasi
-
-### 1️⃣ Persiapan
-Pastikan **Docker Desktop** sudah terpasang dan dalam keadaan berjalan.
-
----
-
-### 2️⃣ Install Dependency
+### 1. Clone & Install
 ```bash
+git clone [https://github.com/USERNAME_KAMU/repo-backend-kamu.git](https://github.com/USERNAME_KAMU/repo-backend-kamu.git)
+cd nama-folder
 npm install
 ```
 
-### 3️⃣ Setup Database (Docker + Prisma)
+### 2. Setup Environment
+Copy file .env.example menjadi .env:
+
+```bash
+cp .env.example .env
+(Sesuaikan DATABASE_URL jika konfigurasi Docker kamu berbeda)
+```
+
+### 3. Run database via Docker
 ```bash
 docker-compose up -d
+```
+
+### 4. Migrasi Database
+```bash
 npx prisma migrate dev
 ```
-### 4️⃣ Jalankan Server
+
+### 5. Jalankan Server
 ```bash
 npm run start:dev
 ```
-Akses Swagger API Documentation di:
-```bash
-Salin kode
-http://localhost:3000/api
-```
-### 5️⃣ Jalankan Testing (Opsional)
+Server akan berjalan di http://localhost:3000. Buka Swagger UI di: http://localhost:3000/api
+
+## Testing
+Project memiliki coverage test yang tinggi untuk module vital (Auth, Transaction, User).
+
 ```bash
 npm test
 ```
-### 6️⃣ Melihat Data Menggunakan Prisma Studio
-```bash
-npx prisma studio
-```
-### 📌 Catatan
-
-Pastikan environment variable sudah dikonfigurasi dengan benar (.env)
-
-Gunakan Idempotency-Key pada request transaksi untuk mencegah duplikasi
-
-Dokumentasi API lengkap dapat dilihat melalui Swagger
